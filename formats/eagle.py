@@ -131,9 +131,7 @@ class EaglePCB(mainPCB):
     
     def getLibraries(self):
         if len(self.libraries) == 0:
-            ##    Suport EAGLE 9.x.x    ##
-            self.projektBRD = re.sub('urn="urn:[a-z]+.[a-z]+:[a-z]+:([0-9]+|/)+"', '', self.projektBRD)
-            ###############################
+            
             data = re.findall("<libraries>(.+?)</libraries>", self.projektBRD, re.MULTILINE|re.DOTALL)[0]
             for i in re.findall('<library name="(.+?)">(.+?)</library>', data, re.MULTILINE|re.DOTALL):
                 if not i[0] in self.libraries:
@@ -144,9 +142,6 @@ class EaglePCB(mainPCB):
     
     def getElements(self):
         if len(self.elements) == 0:
-            ##    Suport EAGLE 9.x.x    ##
-            self.projektBRD = re.sub('library_urn="urn:[a-z]+.[a-z]+:[a-z]+:([0-9]+|/)+"', '', self.projektBRD)
-            ###############################
             data = re.findall("<elements>(.+?)</elements>", self.projektBRD, re.MULTILINE|re.DOTALL)[0]
             for i in re.findall('<element name="(|.+?)" library="(.+?)" package="(.+?)" value="(|.+?)" x="(.+?)" y="(.+?)"( locked="(.+?)"|)( populate="(.+?)"|)( smashed="(.+?)"|)( rot="(.+?)"|)(/>|>\n(.+?)\n</element>)', data, re.MULTILINE|re.DOTALL):
                 name = i[0]
@@ -337,7 +332,12 @@ class EaglePCB(mainPCB):
     def setProject(self, filename):
         #self.projektBRD = minidom.parse(filename)
         self.projektBRD = __builtin__.open(filename).read()
-
+         ##    Suport EAGLE 9.x.x    ##
+        self.projektBRD = re.sub('urn="urn:[a-z]+.[a-z]+:[a-z]+:([0-9]+|/)+"', '', self.projektBRD)
+        self.projektBRD = re.sub('package3d_urn="urn:[a-z]+.[a-z]+:[a-z]+:([0-9]+|/)+"', '', self.projektBRD)
+        self.projektBRD = re.sub('library_urn="urn:[a-z]+.[a-z]+:[a-z]+:([0-9]+|/)+"', '', self.projektBRD)
+        self.projektBRD = re.sub('library_version="([0-9]+|.)+"', '', self.projektBRD)
+        ###############################
     def getPCB(self):
         PCB = []
         wygenerujPada = True
