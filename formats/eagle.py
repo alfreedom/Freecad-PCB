@@ -58,6 +58,7 @@ class dialogMAIN(dialogMAIN_FORM):
         self.databaseType = "eagle"
         
         self.projektBRD = minidom.parse(filename)
+       
         self.layersNames = self.getLayersNames()
         if FreeCAD.ParamGet("User parameter:BaseApp/Preferences/Mod/PCB").GetBool("boardImportThickness", True):
             self.gruboscPlytki.setValue(self.getBoardThickness())
@@ -333,10 +334,10 @@ class EaglePCB(mainPCB):
         #self.projektBRD = minidom.parse(filename)
         self.projektBRD = __builtin__.open(filename).read()
          ##    Suport EAGLE 9.x.x    ##
-        self.projektBRD = re.sub('urn="urn:[a-z]+.[a-z]+:[a-z]+:([0-9]+|/)+"', '', self.projektBRD)
-        self.projektBRD = re.sub('package3d_urn="urn:[a-z]+.[a-z]+:[a-z]+:([0-9]+|/)+"', '', self.projektBRD)
-        self.projektBRD = re.sub('library_urn="urn:[a-z]+.[a-z]+:[a-z]+:([0-9]+|/)+"', '', self.projektBRD)
-        self.projektBRD = re.sub('library_version="([0-9]+|.)+"', '', self.projektBRD)
+        self.projektBRD = re.sub(' library_urn="urn:[a-z]+.[a-z]+:[a-z]+:([0-9]+|/)+"', '', self.projektBRD)
+        self.projektBRD = re.sub(' package3d_urn="urn:[a-z]+.[a-z]+:[a-z]+:([0-9]+|/)+"', '', self.projektBRD)
+        self.projektBRD = re.sub(' library_version="([0-9]+|.)+"', '', self.projektBRD)
+        self.projektBRD = re.sub(' urn="urn:[a-z]+.[a-z]+:[a-z]+:([0-9]+|/)+"', '', self.projektBRD)
         ###############################
     def getPCB(self):
         PCB = []
